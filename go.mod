@@ -1,6 +1,6 @@
 module github.com/claw-bot/tailscale-derper-alpn
 
-go 1.25.5
+go 1.21
 
 require (
 	github.com/coder/websocket v1.8.12
