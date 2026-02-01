@@ -1,0 +1,79 @@
+# Git
+.git
+.gitignore
+
+# GitHub
+.github/workflows/*.md
+
+# Documentation
+*.md
+!README.md
+
+# Development files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test files
+*_test.go
+alpn_test.go
+derper_test.go
+bootstrap_dns_test.go
+cert_test.go
+
+# Local development
+.env
+.env.local
+.env.development
+.env.production
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.out
+*.test
+
+# Go workspace files
+go.work
+go.work.sum
+
+# IDE files
+*.iml
+.idea/
+.vscode/
+*.code-workspace
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Logs
+*.log
+logs/
+
+# Certs (for local development)
+certs/
+*.pem
+*.crt
+*.key
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+.dockerignore
+
+# CI/CD
+.github/workflows/*.yml
+!github/workflows/docker.yml

@@ -14,13 +14,15 @@ Adds TLS ALPN-01 challenge support to the Tailscale DERP server, enabling it to 
 - ✅ **Firewall Friendly** - Single port exposure
 - ✅ **Unit Tests** - Comprehensive test coverage
 - ✅ **Complete Documentation** - User and developer documentation included
+- ✅ **Docker Support** - Ready for containerized deployment
+- ✅ **GitHub Actions** - Automated CI/CD pipeline
 
 ## 🚀 Quick Start
 
 ### Build
 
 ```bash
-go build ./cmd/derper
+go build -o derper .
 ```
 
 ### Basic Usage (Let's Encrypt)
@@ -59,6 +61,56 @@ go build ./cmd/derper
   --addr=:3340
 ```
 
+## 🐳 Docker Deployment
+
+### Build and Run Locally
+
+```bash
+# Build the Docker image
+docker build -t derper-alpn .
+
+# Run the container
+docker run -d \
+  --name derper \
+  -p 443:443 \
+  -p 80:80 \
+  -p 3478:3478/udp \
+  -e DERP_DOMAIN=derp.example.com \
+  -e DERP_ACME_EMAIL=admin@example.com \
+  -v ./certs:/app/certs \
+  derper-alpn
+```
+
+### Using Docker Compose
+
+```bash
+# Start the service
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the service
+docker-compose down
+```
+
+### GitHub Container Registry
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/claw-bot/tailscale-derper-alpn:main
+
+# Run the image
+docker run -d \
+  --name derper \
+  -p 443:443 \
+  -p 80:80 \
+  -p 3478:3478/udp \
+  -e DERP_DOMAIN=derp.example.com \
+  -e DERP_ACME_EMAIL=admin@example.com \
+  ghcr.io/claw-bot/tailscale-derper-alpn:main
+```
+
 ## 📁 Files
 
 ### Core Implementation
@@ -66,23 +118,33 @@ go build ./cmd/derper
 - **alpn_test.go** - Unit tests for ALPN functionality
 - **cert.go** - Modified to integrate ALPN provider
 - **derper.go** - Modified to support `--certmode=alpn`
+- **go.mod** - Go module definition
+- **go.sum** - Go module checksums
+
+### Docker & CI/CD
+- **Dockerfile** - Multi-stage Docker build
+- **docker-compose.yml** - Local development setup
+- **.dockerignore** - Docker build exclusions
+- **.github/workflows/docker.yml** - GitHub Actions workflow
+- **DOCKER_GUIDE.md** - Complete Docker deployment guide
 
 ### Documentation
+- **README.md** - This file
 - **ALPN.md** - User documentation and usage guide
 - **ALPN_EXAMPLE.md** - Practical examples and deployment scenarios
 - **ALPN_SUMMARY.md** - Implementation summary and technical details
 - **ALPN_IMPLEMENTATION.md** - Detailed implementation guide
 - **ALPN_QUICK_START.md** - Quick reference card
-- **ALPN_README.md** - Main README (this file)
+- **ALPN_README.md** - Main README
 
 ## 🧪 Testing
 
 ```bash
 # Run unit tests
-go test ./cmd/derper -v -run TestALPN
+go test -v -run TestALPN
 
 # Build
-go build ./cmd/derper
+go build -o derper .
 
 # Test ALPN protocol
 openssl s_client -connect your-domain.com:443 -alpn acme-tls/1
@@ -136,6 +198,8 @@ Real certificate is issued
 - ✅ Unit tests passing
 - ✅ Documentation complete
 - ✅ Build successful
+- ✅ Docker support added
+- ✅ GitHub Actions workflow added
 - ⚠️  Full ACME integration (partial - needs account registration)
 - ⚠️  Challenge state management (placeholder implementation)
 - ⚠️  Automatic renewal (future enhancement)

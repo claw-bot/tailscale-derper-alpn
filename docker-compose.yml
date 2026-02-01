@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  derper:
+    build: .
+    container_name: derper
+    restart: unless-stopped
+    ports:
+      - "443:443/tcp"
+      - "80:80/tcp"
+      - "3478:3478/udp"
+    environment:
+      - DERP_DOMAIN=derp.example.com
+      - DERP_CERT_MODE=letsencrypt
+      - DERP_CERT_DIR=/app/certs
+      - DERP_ADDR=:443
+      - DERP_STUN=true
+      - DERP_STUN_PORT=3478
+      - DERP_HTTP_PORT=80
+      - DERP_VERIFY_CLIENTS=false
+      - DERP_VERIFY_CLIENT_URL=
+      - DERP_ACME_EMAIL=admin@example.com
+    volumes:
+      - ./certs:/app/certs
+    networks:
+      - derper-net
+    # For client verification, uncomment the following line:
+    # - /var/run/tailscale/tailscaled.sock:/var/run/tailscale/tailscaled.sock
+
+  # Optional: Add a reverse proxy for additional features
+  # nginx-proxy:
+  #   image: nginx:alpine
+  #   container_name: nginx-proxy
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #   depends_on:
+  #     - derper
+  #   networks:
+  #     - derper-net
+
+networks:
+  derper-net:
+    driver: bridge
